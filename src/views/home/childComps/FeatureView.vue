@@ -1,10 +1,10 @@
 <template>
-$END$
+
 </template>
 
 <script>
 export default {
-name: "1"
+  name: "FeatureView"
 }
 </script>
 
