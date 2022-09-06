@@ -1,5 +1,5 @@
 <template>
-  <Swiper>
+  <Swiper class="navimg">
     <swiper-item v-for="item in banners">
       <a :href = "item.link">
         <img :src = "item.image" alt = "" class="navimg">
@@ -35,7 +35,7 @@ export default {
 </script>
 
 <style scoped>
-.navimg{
+.navimg img{
   width: 100%;
 }
 </style>
