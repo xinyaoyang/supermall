@@ -1,12 +1,15 @@
 <template>
-  <div class="goods-item">
-    <img :src = "goodsItem.show.img" alt = "">
-    <div class="goods-info">
-      <p>{{goodsItem.title}}</p>
-      <span class="price">{{goodsItem.price}}</span>
-      <span class="collect">{{goodsItem.cfav}}</span>
+  <a :href = "goodsItem.link" class="goods-item">
+    <div>
+      <img :src = "goodsItem.show.img" alt = "">
+      <div class="goods-info">
+        <p>{{goodsItem.title}}</p>
+        <span class="price">{{goodsItem.price}}</span>
+        <span class="collect">{{goodsItem.cfav}}</span>
+      </div>
     </div>
-  </div>
+  </a>
+
 </template>
 
 <script>
