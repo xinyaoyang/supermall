@@ -7,12 +7,13 @@
             :pull-up-load="true"
             @monitorScroll="contentScroll"
             @pullingUp="loadMore">
+            <!--@pullingUp="loadMore">-->
       <home-swiper :banners="banners"></home-swiper>
       <recommend-view :recommends="recommends"></recommend-view>
       <feature-view></feature-view>
       <tab-control :title="['流行','新款','精选']"
-                   class="tab-control"
-                   @tabClick="tabClick"></tab-control>
+                   @tabClick="tabClick"
+                   ref="tabControl"></tab-control>
       <good-list :goods="showGoods"></good-list>
     </Scroll>
     <back-top @click="backClick" v-show="isShowBackTop"/>
@@ -21,17 +22,18 @@
 </template>
 
 <script>
-  import HomeSwiper from "@/views/home/childComps/HomeSwiper";
-  import RecommendView from "@/views/home/childComps/RecommendView";
-  import FeatureView from "@/views/home/childComps/FeatureView";
+import HomeSwiper from "@/views/home/childComps/HomeSwiper";
+import RecommendView from "@/views/home/childComps/RecommendView";
+import FeatureView from "@/views/home/childComps/FeatureView";
 
-  import NavBar from "@/components/common/navbar/NavBar";
-  import TabControl from "@/components/content/tabControl/TabControl";
-  import GoodList from "@/components/content/goods/GoodList";
-  import Scroll from "@/components/common/scroll/Scroll";
-  import BackTop from "@/components/content/backTop/BackTop";
+import NavBar from "@/components/common/navbar/NavBar";
+import TabControl from "@/components/content/tabControl/TabControl";
+import GoodList from "@/components/content/goods/GoodList";
+import Scroll from "@/components/common/scroll/Scroll";
+import BackTop from "@/components/content/backTop/BackTop";
 
-  import {getHomeMultidata,getHomeGoods} from "@/network/home";
+import {getHomeMultidata,getHomeGoods} from "@/network/home";
+import debounce from "@/components/utils";
 
 
 export default {
@@ -56,7 +58,7 @@ export default {
         sell: {page: 0, list: []}
       },
       currentType: 'pop',
-      isShowBackTop: true
+      isShowBackTop: false
     }
   },
   computed: {
@@ -72,11 +74,26 @@ export default {
     this.getHomeGoods('pop')
     this.getHomeGoods('new')
     this.getHomeGoods('sell')
+
+  },
+  mounted() {
+    //1.图片加载的事件监听和消抖设置
+    const refresh = debounce(this.$refs.scroll.refresh,500)
+    //1.监听Item中图片监听完成
+    this.$bus.on('itemImageLoad',() => {
+      // console.log(this.$refs.scroll.refresh)
+      refresh()
+    })
+
+    //2.获取tabControl的offsetTop
+    //所有的组件都有$el属性：用于获取组件中的元素
+    console.log(this.$refs.tabControl.$el.offsetTop);
   },
   methods: {
     /*
     * 事件监听相关方法
     * */
+
     tabClick(index) {
       switch (index) {
         case 0:
@@ -146,12 +163,6 @@ export default {
   left: 0;
   right: 0;
   top: 0;
-  z-index: 9;
-}
-
-.tab-control {
-  position: sticky;
-  top: 44px;
   z-index: 9;
 }
 

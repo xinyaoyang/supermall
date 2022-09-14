@@ -1,25 +1,26 @@
 <template>
- <div class="wrapper" ref="wrapper">
-   <div class="context">
-     <slot></slot>
-   </div>
- </div>
+  <div className = "wrapper" ref = "wrapper">
+    <div className = "context">
+      <slot></slot>
+    </div>
+  </div>
 </template>
 
 <script>
-  import BScroll from "better-scroll";
-  export default {
-    name: "Scroll",
-    props: {
-      probeType: {
-        type: Number,
-        default: 0
-      },
+import BScroll from "better-scroll";
+
+export default {
+  name: "Scroll",
+  props: {
+    probeType: {
+      type: Number,
+      default: 0
+       },
       pullUpLoad: {
         type: Boolean,
         default: false
       }
-    },
+        },
     data() {
       return {
         scroll: null,
@@ -38,36 +39,50 @@
     mounted() {
       // setTimeout(() => {
 
-        //1.创建BScroll对象
-        this.scroll = new BScroll(this.$refs.wrapper,{
-          probeType:  this.probeType,
-          ObserverDOM: true,
-          click: true,
-          mouseWheel: true,
-          pullUpLoad: this.pullUpLoad
-        })
+      //1.创建BScroll对象
+      this.scroll = new BScroll(this.$refs.wrapper, {
+        probeType: this.probeType,
+        // ObserverDOM: true,
+        click: true,
+        // mouseWheel: true,
+        pullUpLoad: this.pullUpLoad
+      })
 
-        //2.监听滚动的位置
-        this.scroll.on('scroll',(position) => {
-          this.$emit('monitorScroll',position)
+      //2.监听滚动的位置
+      if(this.probeType === 2 || this.probeType ===3){
+        this.scroll.on('scroll', (position) => {
+          this.$emit('monitorScroll', position)
         })
+      }
 
-        //3.监听上拉事件
-        this.scroll.on('pullingUp',() => {
-          // console.log('上拉加载更多')
+      // 3.监听上拉事件
+      if(this.pullUpLoad){
+        this.scroll.on('pullingUp', () => {
+          // console.log('监听滚动到底部')
+          //监听滚动到底部
           this.$emit('pullingUp')
         })
-      // },1000)
+      }
+
+      // console.log(this.scroll)
+
+
     },
     methods: {
-      scrollTo(x,y,time=500) {
-        this.scroll.scrollTo(x,y,500)
+      scrollTo(x, y, time = 500) {
+        this.scroll && this.scrollTo&& this.scroll.scrollTo(x, y, 500)
       },
       finishPullUp() {
-        this.scroll.finishPullUp()
+        this.scroll && this.scroll.finishPullUp()
+      },
+      refresh() {
+        // console.log('------')
+        this.scroll && this.scroll.refresh()
       }
     }
   }
+
+
 </script>
 
 <style scoped>

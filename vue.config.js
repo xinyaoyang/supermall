@@ -9,6 +9,7 @@ module.exports = defineConfig({
         'components': '@/components',
         'network': '@/components',
         'views': '@/views',
+        'utils': '@/utils'
       }
     }
   }
